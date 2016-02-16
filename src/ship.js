@@ -4,13 +4,14 @@ var Ship = cc.Sprite.extend({
         this.initWithFile( 'res/images/ship.png' );
     },
     
-    update: function(dt){
-        var pos = this.getPosition();
-        pos.y += 1;
-        this.setPosition(new cc.Point(pos.x , pos.y));
-        
-        this.angle += 1;
-        
+    update: function( dt ) {
+	var pos = this.getPosition();
+ 
+	if ( pos.y < screenHeight ) {
+	    this.setPosition( new cc.Point( pos.x, pos.y + 5 ) );
+	} else {
+	    this.setPosition( new cc.Point( pos.x, 0 ) );
+	}
     }
 });
 
