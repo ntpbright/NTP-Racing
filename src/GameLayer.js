@@ -1,34 +1,45 @@
 var GameLayer = cc.LayerColor.extend({
-  
+
     init: function() {
         this._super( new cc.Color( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
         this.addKeyboardHandlers();
-        this.ship = new Ship();
-	    this.ship.setPosition( new cc.Point( 200, 220 ) );
-	    this.addChild( this.ship );
-        this.ship.scheduleUpdate();
-        this.gold = new Gold();
-	    this.addChild( this.gold );
-	    this.gold.randomPosition();
+
+        this.bgArr = [];
+        this.addBg();
+
+        this.car = new Car();
+        this.addChild(this.car);
+        this.car.scheduleUpdate();
+
+        this.obstacle = new Obstacle();
+        this.addChild(this.obstacle);
+        this.obstacle.scheduleUpdate();
+
         this.scheduleUpdate();
         this.score = 0;
         this.scoreLabel = cc.LabelTTF.create( this.score + "", 'Arial', 40 );
-	    this.scoreLabel.setPosition( new cc.Point( 750, 550 ) );
-	    this.addChild( this.scoreLabel );
+	      this.scoreLabel.setPosition( new cc.Point( 750, 550 ) );
+	      this.addChild( this.scoreLabel );
         return true;
     },
-    onKeyDown: function( keyCode, event ) {
-        if ( keyCode == cc.KEY.up ) {
-            this.ship.switchDirection(cc.KEY.up);
-        }else if ( keyCode == cc.KEY.right ) {
-            this.ship.switchDirection(cc.KEY.right);
-        }else if ( keyCode == cc.KEY.left ) {
-            this.ship.switchDirection(cc.KEY.left);
-        }else{
-            this.ship.switchDirection(cc.KEY.down);
+    addBg: function(){
+        var posX = 250;
+        var posY = 600;
+        for(i = 0  ; i < 2 ; i++){
+          this.bgArr.push(new Bg());
+          this.bgArr[i].setPosition(new cc.Point( posX,posY ));
+          this.addChild(this.bgArr[i]);
+          this.bgArr[i].scheduleUpdate();
+          posY += 1200;
         }
-        
+    },
+    onKeyDown: function( keyCode, event ) {
+        if ( keyCode == cc.KEY.right ) {
+            this.car.changePosition(cc.KEY.right);
+        }else if ( keyCode == cc.KEY.left ) {
+            this.car.changePosition(cc.KEY.left);
+        }
     },
     onKeyUp: function( keyCode, event ) {
         console.log( 'Up: ' + keyCode.toString() );
@@ -46,16 +57,13 @@ var GameLayer = cc.LayerColor.extend({
         }, this);
     },
     update: function(){
-        if(this.gold.closeTo(this.ship)){
-            this.gold.randomPosition();     
-            this.score += 1;
-            this.scoreLabel.setString( this.score + "");
+        for(i = 0  ; i < 2 ; i++){
+          this.bgArr[i].update();
         }
-        
     }
-    
+
 });
- 
+
 var StartScene = cc.Scene.extend({
     onEnter: function() {
         this._super();
@@ -64,5 +72,3 @@ var StartScene = cc.Scene.extend({
         this.addChild( layer );
     }
 });
-
-
