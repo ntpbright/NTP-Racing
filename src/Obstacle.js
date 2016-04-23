@@ -4,11 +4,14 @@ var Obstacle = cc.Sprite.extend({
         this._super();
         this.initWithFile( 'res/images/obstacle_01.png' );
         this.randomPosition();
+        this.started = false;
         this.velocity = this.randomVelocity();
     },
     update: function( dt ) {
         // this.pos = this.getPosition();
-        this.move();
+        if(this.started){
+          this.move();
+        }
     },
     move: function(){
         this.setPosition(this.getPositionX(), this.getPositionY() - this.velocity);
@@ -40,5 +43,22 @@ var Obstacle = cc.Sprite.extend({
         }else if(lane == 6 ){
            return 375;
         }
+    },
+    closeTo: function( obj ) {
+        var myPos = this.getPosition();
+        var oPos = obj.getPosition();
+        return ( ( Math.abs( myPos.x - oPos.x ) <= 40 ) &&
+             ( Math.abs( myPos.y - oPos.y ) <= 22 ) );
+    },
+    // update: function() {
+    //     if ( this.obstacle.closeTo( this.car ) ) {
+    //       this.started = false;
+    //     }
+    // },
+    start: function() {
+        this.started = true;
+    },
+    stop: function() {
+	     this.started = false;
     }
 });

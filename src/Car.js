@@ -6,10 +6,13 @@ var Car = cc.Sprite.extend({
         this._super();
         this.initWithFile( 'res/images/Car_01.png' );
         this.randomPosition();
+        this.started = false;
     },
     update: function( dt ) {
+      if( this.started){
         this.pos = this.getPosition();
         this.changePosition();
+      }
     },
     randomPosition: function() {
         this.setPosition( new cc.Point( this.randomLane(), 75));
@@ -56,12 +59,14 @@ var Car = cc.Sprite.extend({
     },
     moveLeft: function(){
         this.setPosition( new cc.Point( this.pos.x - 50, this.pos.y) );
+    },
+    start: function() {
+        this.started = true;
+    },
+    stop: function() {
+	     this.started = false;
     }
 });
-Car.STATUS = {
-    live: 1,
-    dead: 2
-};
 Car.LANE = {
     1: 125,
     2: 175,
