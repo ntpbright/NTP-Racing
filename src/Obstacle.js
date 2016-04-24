@@ -7,6 +7,14 @@ var Obstacle = cc.Sprite.extend({
         this.started = false;
         this.velocity = this.randomVelocity();
     },
+    ctor: function(lane) {
+        this._super();
+        this.initWithFile( 'res/images/obstacle_01.png' );
+        this.started = false;
+        this.setPositionX(this.selectLane(lane));
+        this.setPositionY(650);
+        this.velocity = this.randomVelocity();
+    },
     update: function( dt ) {
         // this.pos = this.getPosition();
         if(this.started){
@@ -16,7 +24,7 @@ var Obstacle = cc.Sprite.extend({
     move: function(){
         this.setPosition(this.getPositionX(), this.getPositionY() - this.velocity);
         if(this.getPositionY() < -50){
-          this.randomPosition();
+          this.setPositionY(650);
           this.velocity = this.randomVelocity();
         }
     },
@@ -24,9 +32,23 @@ var Obstacle = cc.Sprite.extend({
         return Math.floor(Math.random()*4+1);
     },
     randomPosition: function() {
-        console.log("test");
         this.setPositionX(this.randomLane());
         this.setPositionY(650);
+    },
+    selectLane: function(lane){
+        if(lane == 1 ){
+           return 125;
+        }else if(lane == 2 ){
+           return 175;
+        }else if(lane == 3 ){
+           return 225;
+        }else if(lane == 4 ){
+           return 275;
+        }else if(lane == 5 ){
+           return 325;
+        }else if(lane == 6 ){
+           return 375;
+        }
     },
     randomLane: function(){
         var lane = Math.floor(Math.random() * 6)+1;

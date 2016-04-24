@@ -13,9 +13,9 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild(this.car);
         this.car.scheduleUpdate();
         //initailize obstacle
-        this.obstacle = new Obstacle();
-        this.addChild(this.obstacle);
-        this.obstacle.scheduleUpdate();
+        this.obstacleArr = [];
+        this.addObstacle();
+
         //initailize score
         this.scheduleUpdate();
         this.score = 0;
@@ -36,6 +36,14 @@ var GameLayer = cc.LayerColor.extend({
           this.bgArr[i].scheduleUpdate();
           posY += 1200;
         }
+    },
+    //add obstacle to frame
+    addObstacle: function(){
+      for(i = 1  ; i <= 6 ; i++){
+        this.obstacleArr[i] = new Obstacle(i)
+        this.addChild(this.obstacleArr[i]);
+        this.obstacleArr[i].scheduleUpdate();
+      }
     },
     //check event aftter key down
     onKeyDown: function( keyCode, event ) {
@@ -69,7 +77,9 @@ var GameLayer = cc.LayerColor.extend({
     },
     startGame: function() {
         this.car.start();
-        this.obstacle.start();
+        for(i = 1 ; i <= 6 ; i++){
+              this.obstacleArr[i].start();
+        }
         for(i = 0  ; i < 2 ; i++){
           this.bgArr[i].start();
         }
@@ -77,18 +87,24 @@ var GameLayer = cc.LayerColor.extend({
     endGame: function() {
         this.state = GameLayer.STATES.DEAD;
         this.car.stop();
-        this.obstacle.stop();
+        for(i = 1 ; i <= 6 ; i++){
+          if(this.obstacleArr[i].closeTo(this.car)){
+              this.obstacleArr[i].stop();
+          }
+        }
         for(i = 0  ; i < 2 ; i++){
           this.bgArr[i].stop();
         }
     },
     update: function(){
-        for(i = 0  ; i < 2 ; i++){
-          this.bgArr[i].update();
-        }
-        if(this.obstacle.closeTo(this.car)){
+      for(i = 0  ; i < 2 ; i++){
+        this.bgArr[i].update();
+      }
+      for(i = 1 ; i <= 6 ; i++){
+        if(this.obstacleArr[i].closeTo(this.car)){
             this.endGame();
         }
+      }
     }
 
 });
