@@ -5,6 +5,7 @@ var GameLayer = cc.LayerColor.extend({
         this._super( new cc.Color( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
         this.addKeyboardHandlers();
+        this.addMouseHandlers();
         //initailize BG
         this.bgArr = [];
         this.addBg();
@@ -15,12 +16,11 @@ var GameLayer = cc.LayerColor.extend({
         //initailize obstacle
         this.obstacleArr = [];
         this.addObstacle();
-
         //initailize score
         this.scheduleUpdate();
         this.score = 0;
         this.scoreLabel = cc.LabelTTF.create( this.score + "", 'Arial', 40 );
-	      this.scoreLabel.setPosition( new cc.Point( 750, 550 ) );
+	      this.scoreLabel.setPosition( new cc.Point(450,550 ) );
 	      this.addChild( this.scoreLabel );
         this.state = GameLayer.STATES.FRONT;
         return true;
@@ -58,6 +58,10 @@ var GameLayer = cc.LayerColor.extend({
               }else if ( keyCode == cc.KEY.left ) {
                   this.car.changePosition(cc.KEY.left);
               }
+        }else if ( this.state == GameLayer.STATES.DEAD) {
+            if( keyCode == 32){
+              this.restartGame();
+            }
         }
     },
     onKeyUp: function( keyCode, event ) {
@@ -75,6 +79,32 @@ var GameLayer = cc.LayerColor.extend({
             }
         }, this);
     },
+    addMouseHandlers: function(){
+      var self = this;
+      cc.eventManager.addListener({
+        event: cc.EventListener.MOUSE,
+              onMouseMove: function(event){
+                  var str = "MousePosition X: " + event.getLocationX() + "  Y:" + event.getLocationY();
+                  console.log(str);
+                  // do something...
+              },
+              onMouseUp: function(event){
+                  var str = "Mouse Up detected, Key: " + event.getButton();
+                  console.log(str);
+                  // do something...
+              },
+              onMouseDown: function(event){
+                  var str = "Mouse Down detected, Key: " + event.getButton();
+                  console.log(str);
+                  // do something...
+              },
+              onMouseScroll: function(event){
+                  var str = "Mouse Scroll detected, X: " + event.getLocationX() + "  Y:" + event.getLocationY();
+                  console.log(str);
+                  // do something...
+              }
+      },this);
+    },
     startGame: function() {
         this.car.start();
         for(i = 1 ; i <= 6 ; i++){
@@ -84,29 +114,40 @@ var GameLayer = cc.LayerColor.extend({
           this.bgArr[i].start();
         }
     },
-    endGame: function() {
+    endGame: function(onLane) {
         this.state = GameLayer.STATES.DEAD;
         this.car.stop();
-        for(i = 1 ; i <= 6 ; i++){
-          if(this.obstacleArr[i].closeTo(this.car)){
-              this.obstacleArr[i].stop();
-          }
-        }
+        this.obstacleArr[onLane].stop();
         for(i = 0  ; i < 2 ; i++){
           this.bgArr[i].stop();
         }
+        this.gameOverLabel = cc.LabelTTF.create("Game Over", 'Arial', 50 );
+	      this.gameOverLabel.setPosition( new cc.Point(250,300 ) );
+	      this.addChild( this.gameOverLabel );
+    },
+    restartGame: function(){
+      this.init();
+      this.startGame();
     },
     update: function(){
       for(i = 0  ; i < 2 ; i++){
         this.bgArr[i].update();
       }
       for(i = 1 ; i <= 6 ; i++){
-        if(this.obstacleArr[i].closeTo(this.car)){
-            this.endGame();
+        if( this.state != GameLayer.STATES.DEAD){
+          if(this.obstacleArr[i].closeTo(this.car)){
+            this.endGame(i);
+          }
+          if(this.obstacleArr[i].pass(this.car)){
+            if(this.obstacleArr[i].passCount == Obstacle.passCount.NOTYET){
+              this.score += 100;
+              this.scoreLabel.setString( this.score + "");
+              this.obstacleArr[i].passCount == Obstacle.passCount.PASSED;
+            }
+          }
         }
       }
     }
-
 });
 var StartScene = cc.Scene.extend({
     onEnter: function() {
