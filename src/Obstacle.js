@@ -6,6 +6,7 @@ var Obstacle = cc.Sprite.extend({
         this.randomPosition();
         this.started = false;
         this.velocity = this.randomVelocity();
+        this.constantsVelocity = 0.1;
     },
     ctor: function(lane) {
         this._super();
@@ -15,6 +16,7 @@ var Obstacle = cc.Sprite.extend({
         this.setPositionY(650);
         this.velocity = this.randomVelocity();
         this.passCount = Obstacle.passCount.NOTYET;
+        this.constantsVelocity = 0.1;
     },
     update: function( dt ) {
         // this.pos = this.getPosition();
@@ -23,15 +25,15 @@ var Obstacle = cc.Sprite.extend({
         }
     },
     move: function(){
-        this.setPosition(this.getPositionX(), this.getPositionY() - this.velocity);
-        if(this.getPositionY() < -50){
+        this.setPosition(this.getPositionX(), (this.getPositionY() - this.velocity) - this.constantsVelocity);
+        if(this.passCount == Obstacle.passCount.PASSED){
           this.setPositionY(650);
           this.velocity = this.randomVelocity();
           this.passCount = Obstacle.passCount.NOTYET;
         }
     },
     randomVelocity: function(){
-        return Math.floor(Math.random()*4+1);
+        return Math.floor(Math.random()*4+3);
     },
     randomPosition: function() {
         this.setPositionX(this.randomLane());
@@ -76,13 +78,8 @@ var Obstacle = cc.Sprite.extend({
     },
     pass: function(obj){
         var myPos = this.getPosition();
-        return myPos.y  < -49;
+        return myPos.y  <= -40;
     },
-    // update: function() {
-    //     if ( this.obstacle.closeTo( this.car ) ) {
-    //       this.started = false;
-    //     }
-    // },
     start: function() {
         this.started = true;
     },

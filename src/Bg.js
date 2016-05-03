@@ -3,6 +3,7 @@ var Bg = cc.Sprite.extend({
         this._super();
         this.initWithFile( 'res/images/bg.jpg' );
         this.started = false;
+        this.constantsVelocity = 0.1;
     },
     update: function( dt ) {
       if(this.started){
@@ -11,10 +12,10 @@ var Bg = cc.Sprite.extend({
       }
     },
     slide: function(){
-        if(this.pos.y== -1200){
+        if(this.pos.y<= -1200){
             this.setPosition( new cc.Point( this.pos.x, this.pos.y+2400) );
         }else{
-            this.setPosition( new cc.Point( this.pos.x, this.pos.y-1) );
+            this.setPosition( new cc.Point( this.pos.x, this.pos.y - 1 - this.constantsVelocity) );
         }
     },
     start: function() {

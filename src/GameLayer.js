@@ -9,7 +9,15 @@ var GameLayer = cc.LayerColor.extend({
         //initailize BG
         this.bgArr = [];
         this.addBg();
-        //initailize BG
+        this.frontLabel = cc.LabelTTF.create("         NTP Racing \n\n\n Press any button to start" , 'Agency FB',30);
+        this.frontLabel.setPosition(new cc.Point(250,300));
+        this.addChild(this.frontLabel);
+        this.state = GameLayer.STATES.FRONT;
+        return true;
+    },
+    initForStart: function(){
+        this.removeChild(this.frontLabel);
+        //initailize Car
         this.car = new Car();
         this.addChild(this.car);
         this.car.scheduleUpdate();
@@ -20,16 +28,37 @@ var GameLayer = cc.LayerColor.extend({
         this.scheduleUpdate();
         this.score = 0;
         this.scoreLabel = cc.LabelTTF.create( this.score + "", 'Arial', 40 );
-	      this.scoreLabel.setPosition( new cc.Point(450,550 ) );
-	      this.addChild( this.scoreLabel );
-        this.state = GameLayer.STATES.FRONT;
+        this.scoreLabel.setPosition( new cc.Point(450,550 ) );
+        this.addChild( this.scoreLabel );
         return true;
+    },
+    increaseVelociyty: function () {
+      for( i = 1 ; i <= 6 ; i++){
+          this.obstacleArr[i].constantsVelocity *= 2;
+      }
+      console.log(this.obstacleArr[1].constantsVelocity);
+      for( i = 0 ; i < 3 ; i++){
+          this.bgArr[i].constantsVelocity *= 2;
+      }
+      console.log(this.bgArr[1].constantsVelocity);
+    },
+    decreaseVelociyty: function () {
+      for( i = 1 ; i <= 6 ; i++){
+          this.obstacleArr[i].constantsVelocity /= 4;
+      }
+      console.log(this.obstacleArr[1].constantsVelocity);
+      for( i = 0 ; i < 3 ; i++){
+          if(this.bgArr[i].constantsVelocity >= 0.01){
+              this.bgArr[i].constantsVelocity /= 4;
+          }
+      }
+      console.log(this.bgArr[1].constantsVelocity);
     },
     //add background to frame
     addBg: function(){
         var posX = 250;
         var posY = 600;
-        for(i = 0  ; i < 2 ; i++){
+        for(i = 0  ; i < 3 ; i++){
           this.bgArr.push(new Bg());
           this.bgArr[i].setPosition(new cc.Point( posX,posY ));
           this.addChild(this.bgArr[i]);
@@ -49,6 +78,7 @@ var GameLayer = cc.LayerColor.extend({
     onKeyDown: function( keyCode, event ) {
         //when frist press
         if ( this.state == GameLayer.STATES.FRONT ) {
+              this.initForStart();
               this.startGame();
               this.state = GameLayer.STATES.STARTED;
               console.log("start");
@@ -64,8 +94,17 @@ var GameLayer = cc.LayerColor.extend({
             }
         }
     },
+    onKeyReleased: function( keyCode , event){
+      if ( this.state == GameLayer.STATES.STARTED ) {
+            if ( keyCode == cc.KEY.up ) {
+                this.increaseVelociyty();
+            }else if ( keyCode == cc.KEY.down ) {
+                this.decreaseVelociyty();
+            }
+      }
+    },
     onKeyUp: function( keyCode, event ) {
-        console.log( 'Up: ' + keyCode.toString() );
+        // console.log( 'Up: ' + keyCode.toString() );
     },
     addKeyboardHandlers: function() {
         var self = this;
@@ -75,7 +114,7 @@ var GameLayer = cc.LayerColor.extend({
                 self.onKeyDown( keyCode, event );
             },
             onKeyReleased: function( keyCode, event ) {
-                self.onKeyUp( keyCode, event );
+                self.onKeyReleased( keyCode, event );
             }
         }, this);
     },
@@ -108,9 +147,9 @@ var GameLayer = cc.LayerColor.extend({
     startGame: function() {
         this.car.start();
         for(i = 1 ; i <= 6 ; i++){
-              this.obstacleArr[i].start();
+          this.obstacleArr[i].start();
         }
-        for(i = 0  ; i < 2 ; i++){
+        for(i = 0  ; i < 3 ; i++){
           this.bgArr[i].start();
         }
     },
@@ -118,19 +157,32 @@ var GameLayer = cc.LayerColor.extend({
         this.state = GameLayer.STATES.DEAD;
         this.car.stop();
         this.obstacleArr[onLane].stop();
-        for(i = 0  ; i < 2 ; i++){
+        for(i = 0  ; i < 3 ; i++){
           this.bgArr[i].stop();
         }
-        this.gameOverLabel = cc.LabelTTF.create("Game Over", 'Arial', 50 );
+        this.gameOverLabel = cc.LabelTTF.create("            Game Over \n\n\n\n\n Press space bar to restart", 'Arial', 40 );
 	      this.gameOverLabel.setPosition( new cc.Point(250,300 ) );
 	      this.addChild( this.gameOverLabel );
     },
     restartGame: function(){
+      this.removeObjInGame();
       this.init();
+      this.removeChild(this.frontLabel);
       this.startGame();
     },
+    removeObjInGame: function(){
+      for( i = 1 ; i <= 6 ; i++){
+          this.removeChild(this.obstacleArr[i]);
+      }
+      for( i = 0 ; i < 3 ; i++){
+          this.removeChild(this.bgArr[i]);
+      }
+      this.removeChild(this.car);
+      this.removeChild(this.scoreLabel);
+      this.removeChild(this.gameOverLabel);
+    },
     update: function(){
-      for(i = 0  ; i < 2 ; i++){
+      for(i = 0  ; i < 3 ; i++){
         this.bgArr[i].update();
       }
       for(i = 1 ; i <= 6 ; i++){
@@ -139,11 +191,9 @@ var GameLayer = cc.LayerColor.extend({
             this.endGame(i);
           }
           if(this.obstacleArr[i].pass(this.car)){
-            if(this.obstacleArr[i].passCount == Obstacle.passCount.NOTYET){
               this.score += 100;
               this.scoreLabel.setString( this.score + "");
               this.obstacleArr[i].passCount == Obstacle.passCount.PASSED;
-            }
           }
         }
       }
