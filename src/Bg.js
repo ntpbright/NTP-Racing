@@ -5,7 +5,7 @@ var Bg = cc.Sprite.extend({
         this.started = false;
         this.constantsVelocity = 0.1;
     },
-    update: function( dt ) {
+    update: function( ) {
       if(this.started){
         this.pos = this.getPosition();
         this.slide();

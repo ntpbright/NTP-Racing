@@ -1,4 +1,5 @@
 
+// var passCount = Obstacle.passCount.NOTYET;
 var Obstacle = cc.Sprite.extend({
     ctor: function() {
         this._super();
@@ -18,19 +19,20 @@ var Obstacle = cc.Sprite.extend({
         this.passCount = Obstacle.passCount.NOTYET;
         this.constantsVelocity = 0.1;
     },
-    update: function( dt ) {
+    update: function() {
         // this.pos = this.getPosition();
         if(this.started){
           this.move();
         }
     },
     move: function(){
-        this.setPosition(this.getPositionX(), (this.getPositionY() - this.velocity) - this.constantsVelocity);
-        if(this.passCount == Obstacle.passCount.PASSED){
-          this.setPositionY(650);
-          this.velocity = this.randomVelocity();
-          this.passCount = Obstacle.passCount.NOTYET;
-        }
+      this.setPosition(this.getPositionX(), (this.getPositionY() - this.velocity ) - this.constantsVelocity);
+      console.log(this.passCount);
+      if(this.passCount == Obstacle.passCount.PASSED){
+        this.setPositionY(650);
+        this.velocity = this.randomVelocity();
+        this.passCount = Obstacle.passCount.NOTYET;
+      }
     },
     randomVelocity: function(){
         return Math.floor(Math.random()*4+3);
@@ -78,16 +80,20 @@ var Obstacle = cc.Sprite.extend({
     },
     pass: function(obj){
         var myPos = this.getPosition();
-        return myPos.y  <= -40;
+        var oPos = obj.getPosition();
+        return myPos.y  < oPos.y-100;
     },
     start: function() {
         this.started = true;
     },
     stop: function() {
 	     this.started = false;
+    },
+    passing: function() {
+      this.passCount = Obstacle.passCount.PASSED;
     }
 });
 Obstacle.passCount = {
     NOTYET: 1,
-    PASSED: 2,
+    PASSED: 2
 };

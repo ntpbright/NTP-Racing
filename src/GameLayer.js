@@ -25,31 +25,31 @@ var GameLayer = cc.LayerColor.extend({
         this.obstacleArr = [];
         this.addObstacle();
         //initailize score
-        this.scheduleUpdate();
         this.score = 0;
         this.scoreLabel = cc.LabelTTF.create( this.score + "", 'Arial', 40 );
         this.scoreLabel.setPosition( new cc.Point(450,550 ) );
         this.addChild( this.scoreLabel );
+        this.scheduleUpdate();
         return true;
     },
     increaseVelociyty: function () {
       for( i = 1 ; i <= 6 ; i++){
-          this.obstacleArr[i].constantsVelocity *= 2;
+          this.obstacleArr[i].constantsVelocity += GameLayer.MAGICNUMBER.SPEED;
       }
       console.log(this.obstacleArr[1].constantsVelocity);
       for( i = 0 ; i < 3 ; i++){
-          this.bgArr[i].constantsVelocity *= 2;
+          this.bgArr[i].constantsVelocity += GameLayer.MAGICNUMBER.SPEED;
       }
       console.log(this.bgArr[1].constantsVelocity);
     },
     decreaseVelociyty: function () {
       for( i = 1 ; i <= 6 ; i++){
-          this.obstacleArr[i].constantsVelocity /= 4;
+          this.obstacleArr[i].constantsVelocity -= GameLayer.MAGICNUMBER.SPEED;
       }
       console.log(this.obstacleArr[1].constantsVelocity);
       for( i = 0 ; i < 3 ; i++){
           if(this.bgArr[i].constantsVelocity >= 0.01){
-              this.bgArr[i].constantsVelocity /= 4;
+              this.bgArr[i].constantsVelocity -= GameLayer.MAGICNUMBER.SPEED;
           }
       }
       console.log(this.bgArr[1].constantsVelocity);
@@ -169,6 +169,12 @@ var GameLayer = cc.LayerColor.extend({
       this.init();
       this.removeChild(this.frontLabel);
       this.startGame();
+      for( i = 1 ; i <= 6 ; i++){
+          this.obstacleArr[i].constantsVelocity = 0;
+      }
+      for( i = 0 ; i < 3 ; i++){
+          this.bgArr[i].constantsVelocity = 0;
+      }
     },
     removeObjInGame: function(){
       for( i = 1 ; i <= 6 ; i++){
@@ -182,18 +188,16 @@ var GameLayer = cc.LayerColor.extend({
       this.removeChild(this.gameOverLabel);
     },
     update: function(){
-      for(i = 0  ; i < 3 ; i++){
-        this.bgArr[i].update();
-      }
-      for(i = 1 ; i <= 6 ; i++){
+      for( i = 1 ; i <= 6 ; i++){
         if( this.state != GameLayer.STATES.DEAD){
-          if(this.obstacleArr[i].closeTo(this.car)){
-            this.endGame(i);
-          }
-          if(this.obstacleArr[i].pass(this.car)){
+          if(this.obstacleArr[i].pass(this.car) && this.obstacleArr[i].passCount == Obstacle.passCount.NOTYET){
               this.score += 100;
               this.scoreLabel.setString( this.score + "");
-              this.obstacleArr[i].passCount == Obstacle.passCount.PASSED;
+              // this.obstacleArr[i].passCount == Obstacle.passCount.PASSED;
+              this.obstacleArr[i].passing();
+          }
+          if(this.obstacleArr[i].closeTo(this.car)){
+            this.endGame(i);
           }
         }
       }
@@ -211,4 +215,7 @@ GameLayer.STATES = {
     FRONT: 1,
     STARTED: 2,
     DEAD: 3
+};
+GameLayer.MAGICNUMBER = {
+    SPEED: 0.5
 };
