@@ -20,6 +20,8 @@
         "src/FrontLayer.js",
         "src/GamePlaySinglePlayerLayer.js",
         "src/GameOverLayer.js",
-        "src/BgGameOver.js"
+        "src/BgGameOver.js",
+        "src/Menu.js",
+        "src/BgMenu.js"
     ]
 }

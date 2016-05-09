@@ -9,6 +9,12 @@ var res = {
     Button_arrowRight_af_png : "res/images/arrow_black_right_invert.png",
     Button_restart_png : "res/images/restart.png",
     Button_restart_invert_png : "res/images/restart_invert.png",
+    Button_start_png : "res/images/startButton.png",
+    Button_start_invert_png : "res/images/startButton_invert.png",
+    Button_selectCar_png : "res/images/selectCarButton.png",
+    Button_selectCar_invert_png : "res/images/selectCarButton_invert.png",
+    Button_howToPlay_png : "res/images/howToPlayButton.png",
+    Button_howToPlay_invert_png : "res/images/howToPlayButton_invert.png",
 };
 
 var g_resources = [];
