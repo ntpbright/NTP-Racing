@@ -1,6 +1,3 @@
-var borderLeft = 100;
-var borderRight = 400;
-
 var Car = cc.Sprite.extend({
     ctor: function() {
         this._super();
