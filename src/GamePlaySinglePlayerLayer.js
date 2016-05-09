@@ -17,8 +17,8 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     this.obstacleArr = [];
     this.addObstacle();
     //initailize score
-    this.score = 0;
-    this.scoreLabel = cc.LabelTTF.create( this.score + "", 'Arial', 40 );
+    score = 0;
+    this.scoreLabel = cc.LabelTTF.create( score + "", 'Arial', 40 );
     this.scoreLabel.setPosition( new cc.Point(450,550 ) );
     this.addChild( this.scoreLabel );
     this.highScoreLabel = cc.LabelTTF.create(highScore+"", 'Arial', 40 );
@@ -145,17 +145,15 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
   },
   endGame: function(onLane) {
     this.state = GamePlaySinglePlayerLayer.STATES.DEAD;
-    if(this.score > highScore){
-      highScore = this.score;
+    if(score > highScore){
+      highScore = score;
     }
     this.car.stop();
     this.obstacleArr[onLane].stop();
     for(i = 0  ; i < 3 ; i++){
       this.bgArr[i].stop();
     }
-    this.gameOverLabel = cc.LabelTTF.create("            Game Over \n\n\n\n\n Press space bar to restart", 'Arial', 40 );
-    this.gameOverLabel.setPosition( new cc.Point(250,300 ) );
-    this.addChild( this.gameOverLabel );
+    cc.director.runScene(new GameOverScene());
   },
   restartGame: function(){
     this.state = GamePlaySinglePlayerLayer.STATES.STARTED;
@@ -185,8 +183,8 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     for( i = 1 ; i <= 6 ; i++){
       if(this.state != GamePlaySinglePlayerLayer.STATES.DEAD){
         if(this.obstacleArr[i].pass(this.car) && this.obstacleArr[i].passCount == Obstacle.passCount.NOTYET){
-          this.score += 100;
-          this.scoreLabel.setString( this.score + "");
+          score += 100;
+          this.scoreLabel.setString( score + "");
           // this.obstacleArr[i].passCount == Obstacle.passCount.PASSED;
           this.obstacleArr[i].passing();
         }
@@ -199,6 +197,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
 });
 
 var highScore = "";
+var score = "";
 
 var SinglePlayerScene = cc.Scene.extend({
   onEnter: function() {

@@ -18,6 +18,8 @@
         "src/Car.js",
         "src/Obstacle.js",
         "src/FrontLayer.js",
-        "src/GamePlaySinglePlayerLayer.js"
+        "src/GamePlaySinglePlayerLayer.js",
+        "src/GameOverLayer.js",
+        "src/BgGameOver.js"
     ]
 }
