@@ -17,6 +17,7 @@
         "src/Bg.js",
         "src/Car.js",
         "src/Obstacle.js",
-        "src/FrontLayer.js"
+        "src/FrontLayer.js",
+        "src/GamePlaySinglePlayerLayer.js"
     ]
 }

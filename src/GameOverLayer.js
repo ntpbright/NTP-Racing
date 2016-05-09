@@ -15,7 +15,7 @@ var GameLayer = cc.LayerColor.extend({
 			res.Button_pressAny_af_png,
 			function(){
 				this.unscheduleUpdate();
-				cc.director.runScene(new SinglePlayerScene());
+				cc.director.runScene(new StartScene());
 			},this);
 		this.startButton = new cc.Menu(this.startButton);
 		this.startButton.setPosition(screenWidth/2,screenHeight-385);
@@ -26,7 +26,7 @@ var GameLayer = cc.LayerColor.extend({
   //check event aftter key down
   onKeyDown: function( keyCode, event ) {
     this.unscheduleUpdate();
-    cc.director.runScene(new SinglePlayerScene());
+    cc.director.runScene(new StartScene());
   },
   addKeyboardHandlers: function() {
     var self = this;

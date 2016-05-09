@@ -6,20 +6,6 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     this.setPosition( new cc.Point( 0, 0 ) );
     this.addKeyboardHandlers();
     this.addMouseHandlers();
-
-    this.frontLayer = new FrontLayer();
-    this.frontLayer.setPosition(250,300);
-    this.addChild(this.frontLayer);
-    this.frontLabel = cc.LabelTTF.create("\n\n\n\n\n Press any button to start" , 'Agency FB',30);
-    this.frontLabel.setPosition(new cc.Point(250,300));
-    this.addChild(this.frontLabel);
-    this.state = GameLayer.STATES.FRONT;
-    cc.audioEngine.playMusic('res/sound/r35.mp3');
-    return true;
-  },
-  initForStart: function(){
-    this.removeChild(this.frontLabel);
-    this.removeChild(this.frontLayer);
     //initailize BG
     this.bgArr = [];
     this.addBg();
@@ -38,33 +24,35 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     this.highScoreLabel = cc.LabelTTF.create(highScore+"", 'Arial', 40 );
     this.highScoreLabel.setPosition( new cc.Point(50,550 ) );
     this.addChild( this.highScoreLabel );
+    this.state = GamePlaySinglePlayerLayer.STATES.STARTED;
+    this.startGame();
     this.scheduleUpdate();
     return true;
   },
   increaseVelociyty: function () {
     for( i = 1 ; i <= 6 ; i++){
-      this.obstacleArr[i].constantsVelocity += GameLayer.MAGICNUMBER.SPEED;
+      this.obstacleArr[i].constantsVelocity += GamePlaySinglePlayerLayer.MAGICNUMBER.SPEED;
     }
     for( i = 0 ; i < 3 ; i++){
-      this.bgArr[i].constantsVelocity += GameLayer.MAGICNUMBER.SPEED;
+      this.bgArr[i].constantsVelocity += GamePlaySinglePlayerLayer.MAGICNUMBER.SPEED;
     }
   },
   resetVelocity: function(){
-    GameLayer.MAGICNUMBER.SPEED;
+    GamePlaySinglePlayerLayer.MAGICNUMBER.SPEED;
     for( i = 1 ; i <= 6 ; i++){
-      this.obstacleArr[i].constantsVelocity = GameLayer.MAGICNUMBER.BREAK;
+      this.obstacleArr[i].constantsVelocity = GamePlaySinglePlayerLayer.MAGICNUMBER.BREAK;
     }
     for( i = 0 ; i < 3 ; i++){
-      this.bgArr[i].constantsVelocity = GameLayer.MAGICNUMBER.BREAK;
+      this.bgArr[i].constantsVelocity = GamePlaySinglePlayerLayer.MAGICNUMBER.BREAK;
     }
   },
   decreaseVelociyty: function () {
     for( i = 1 ; i <= 6 ; i++){
-      this.obstacleArr[i].constantsVelocity -= GameLayer.MAGICNUMBER.SPEED;
+      this.obstacleArr[i].constantsVelocity -= GamePlaySinglePlayerLayer.MAGICNUMBER.SPEED;
     }
     for( i = 0 ; i < 3 ; i++){
       if(this.bgArr[i].constantsVelocity >= 0.01){
-        this.bgArr[i].constantsVelocity -= GameLayer.MAGICNUMBER.SPEED;
+        this.bgArr[i].constantsVelocity -= GamePlaySinglePlayerLayer.MAGICNUMBER.SPEED;
       }
     }
   },
@@ -91,12 +79,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
   //check event aftter key down
   onKeyDown: function( keyCode, event ) {
     //when frist press
-    if ( this.state == GameLayer.STATES.FRONT ) {
-      this.initForStart();
-      this.startGame();
-      this.state = GameLayer.STATES.STARTED;
-      console.log("start");
-    }else if ( this.state == GameLayer.STATES.STARTED ) {
+    if (this.state == GamePlaySinglePlayerLayer.STATES.STARTED) {
       if ( keyCode == cc.KEY.right ) {
         this.car.changePosition(cc.KEY.right);
       }else if ( keyCode == cc.KEY.left ) {
@@ -110,19 +93,11 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
       if ( keyCode == 32){
         this.resetVelocity();
       }
-    }else if ( this.state == GameLayer.STATES.DEAD) {
+    }else if ( this.state == GamePlaySinglePlayerLayer.STATES.DEAD) {
       if( keyCode == 32){
         this.restartGame();
       }
     }
-  },
-  onKeyReleased: function( keyCode , event){
-    if ( this.state == GameLayer.STATES.STARTED ) {
-
-    }
-  },
-  onKeyUp: function( keyCode, event ) {
-    // console.log( 'Up: ' + keyCode.toString() );
   },
   addKeyboardHandlers: function() {
     var self = this;
@@ -130,9 +105,6 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
       event: cc.EventListener.KEYBOARD,
       onKeyPressed : function( keyCode, event ) {
         self.onKeyDown( keyCode, event );
-      },
-      onKeyReleased: function( keyCode, event ) {
-        self.onKeyReleased( keyCode, event );
       }
     }, this);
   },
@@ -172,7 +144,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     }
   },
   endGame: function(onLane) {
-    this.state = GameLayer.STATES.DEAD;
+    this.state = GamePlaySinglePlayerLayer.STATES.DEAD;
     if(this.score > highScore){
       highScore = this.score;
     }
@@ -186,7 +158,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     this.addChild( this.gameOverLabel );
   },
   restartGame: function(){
-    this.state = GameLayer.STATES.STARTED;
+    this.state = GamePlaySinglePlayerLayer.STATES.STARTED;
     this.removeObjInGame();
     this.initForStart();
     this.removeChild(this.frontLabel);
@@ -211,7 +183,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
   },
   update: function(){
     for( i = 1 ; i <= 6 ; i++){
-      if( this.state != GameLayer.STATES.DEAD){
+      if(this.state != GamePlaySinglePlayerLayer.STATES.DEAD){
         if(this.obstacleArr[i].pass(this.car) && this.obstacleArr[i].passCount == Obstacle.passCount.NOTYET){
           this.score += 100;
           this.scoreLabel.setString( this.score + "");
@@ -231,16 +203,14 @@ var highScore = "";
 var SinglePlayerScene = cc.Scene.extend({
   onEnter: function() {
     this._super();
-    var layer = new GameLayer();
-    layer.init();
-    this.addChild( layer );
+    var single = new GamePlaySinglePlayerLayer();
+    single.init();
+    this.addChild( single );
   }
 });
 GamePlaySinglePlayerLayer.STATES = {
-  FRONT: 1,
-  MENU: 2,
-  STARTED: 3,
-  DEAD: 4
+    STARTED: 1,
+    DEAD: 2
 };
 GamePlaySinglePlayerLayer.MAGICNUMBER = {
   SPEED: 0.5,
