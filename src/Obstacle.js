@@ -27,7 +27,6 @@ var Obstacle = cc.Sprite.extend({
     },
     move: function(){
       this.setPosition(this.getPositionX(), (this.getPositionY() - this.velocity ) - this.constantsVelocity);
-      console.log(this.passCount);
       if(this.passCount == Obstacle.passCount.PASSED){
         this.setPositionY(650);
         this.velocity = this.randomVelocity();
