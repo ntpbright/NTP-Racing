@@ -17,19 +17,35 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     //initailize obstacle
     this.obstacleArr = [];
     this.addObstacle();
-    //initailize score
-    score = 0;
-    this.scoreLabel = cc.LabelTTF.create( score + "", 'Arial', 40 );
-    this.scoreLabel.setPosition( new cc.Point(450,550 ) );
-    this.addChild( this.scoreLabel );
-    this.highScoreLabel = cc.LabelTTF.create(highScore+"", 'Arial', 40 );
-    this.highScoreLabel.setPosition( new cc.Point(50,550 ) );
-    this.addChild( this.highScoreLabel );
+
+    this.addLabel();
+    this.playBackgroundSound();
     this.state = GamePlaySinglePlayerLayer.STATES.STARTED;
     this.startGame();
-    cc.audioEngine.playMusic(res.Sound_Background);
+
     this.scheduleUpdate();
     return true;
+  },
+  playBackgroundSound: function(){
+    cc.audioEngine.playMusic(res.Sound_Background);
+  },
+  addLabel: function(){
+    //initailize score
+    score = 0;
+    this.yourScoreLabel = cc.LabelTTF.create( "Your score", 'Haettenschweiler', 20 );
+    this.yourScoreLabel.setPosition( new cc.Point(450,580 ) );
+    this.addChild( this.yourScoreLabel );
+    this.scoreLabel = cc.LabelTTF.create( score + "", 'Haettenschweiler', 40 );
+    this.scoreLabel.setPosition( new cc.Point(450,540 ) );
+    this.addChild( this.scoreLabel );
+    if(highScore != ""){
+      this.yourHighScoreLabel = cc.LabelTTF.create("High Score", 'Haettenschweiler', 20 );
+      this.yourHighScoreLabel.setPosition( new cc.Point(50,580 ) );
+      this.addChild( this.yourHighScoreLabel );
+    }
+    this.highScoreLabel = cc.LabelTTF.create(highScore+"", 'Haettenschweiler', 40 );
+    this.highScoreLabel.setPosition( new cc.Point(50,540 ) );
+    this.addChild( this.highScoreLabel );
   },
   increaseVelociyty: function () {
     for( i = 1 ; i <= 6 ; i++){
@@ -155,7 +171,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     for(i = 0  ; i < 3 ; i++){
       this.bgArr[i].stop();
     }
-    cc.director.runScene(new GameOverScene());
+    cc.director.runScene(cc.TransitionFade.create(1,new GameOverScene()));
   },
   restartGame: function(){
     this.state = GamePlaySinglePlayerLayer.STATES.STARTED;

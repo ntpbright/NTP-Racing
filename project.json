@@ -25,7 +25,6 @@
         "src/BgMenu.js",
         "src/SelectCar.js",
         "src/BgSelectCar.js",
-        "src/ShowRoom.js",
         "src/BgHowTo.js",
         "src/HowTo.js"
     ]

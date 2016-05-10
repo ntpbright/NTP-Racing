@@ -10,12 +10,20 @@ var GameOverLayer = cc.LayerColor.extend({
 
     this.addChild(this.bgGameOver);
     this.scheduleUpdate();
+
+    this.addButton();
+    this.addLabel();
+    this.playSound();
+
+    return true;
+  },
+  addButton: function(){
     this.homeButton = new cc.MenuItemImage(
 			res.Button_arrowLeft_bf_png,
 			res.Button_arrowLeft_af_png,
 			function(){
 				this.unscheduleUpdate();
-				cc.director.runScene(new MenuScene());
+				cc.director.runScene( cc.TransitionShrinkGrow.create( 0.4 ,new MenuScene()));
 			},this);
 		this.homeButton = new cc.Menu(this.homeButton);
     this.homeButton.setPosition(50,50);
@@ -26,12 +34,13 @@ var GameOverLayer = cc.LayerColor.extend({
       res.Button_restart_invert_png,
       function(){
         this.unscheduleUpdate();
-        cc.director.runScene(new SinglePlayerScene());
+        cc.director.runScene( cc.TransitionFade.create( 0.4 ,new SinglePlayerScene()));
       },this);
     this.restartButton = new cc.Menu(this.restartButton);
     this.restartButton.setPosition(450,50);
 		this.addChild(this.restartButton);
-
+  },
+  addLabel: function(){
     this.scoreLabel = cc.LabelTTF.create( score+"" , 'Haettenschweiler', 65 );
     this.scoreLabel.setPosition( new cc.Point( 250, 180 ) );
     this.addChild( this.scoreLabel );
@@ -39,8 +48,9 @@ var GameOverLayer = cc.LayerColor.extend({
     this.highScoreLabel = cc.LabelTTF.create( highScore+"" , 'Haettenschweiler', 65 );
     this.highScoreLabel.setPosition( new cc.Point( 250, 335 ) );
     this.addChild( this.highScoreLabel );
+  },
+  playSound: function(){
     cc.audioEngine.playMusic("res/sound/GameOver.mp3");
-    return true;
   }
 });
 

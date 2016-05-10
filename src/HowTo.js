@@ -10,6 +10,10 @@ var HowTo = cc.LayerColor.extend({
 
     this.addChild(this.bgHowTo);
     this.scheduleUpdate();
+    this.addButton();
+    return true;
+  },
+  addButton: function(){
     this.homeButton = new cc.MenuItemImage(
 			res.Button_arrowLeft_bf_png,
 			res.Button_arrowLeft_af_png,
@@ -20,8 +24,6 @@ var HowTo = cc.LayerColor.extend({
 		this.homeButton = new cc.Menu(this.homeButton);
     this.homeButton.setPosition(50,50);
     this.addChild(this.homeButton);
-
-    return true;
   }
 });
 

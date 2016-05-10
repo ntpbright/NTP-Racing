@@ -9,7 +9,13 @@ var GameLayer = cc.LayerColor.extend({
     this.frontLayer = new FrontLayer();
     this.frontLayer.setPosition(250,300);
     this.addChild(this.frontLayer);
+    this.addButton();
+    this.playSound();
     this.scheduleUpdate();
+    return true;
+
+  },
+  addButton: function(){
     this.startButton = new cc.MenuItemImage(
 			res.Button_pressAny_bf_png,
 			res.Button_pressAny_af_png,
@@ -20,8 +26,9 @@ var GameLayer = cc.LayerColor.extend({
 		this.startButton = new cc.Menu(this.startButton);
 		this.startButton.setPosition(screenWidth/2,screenHeight-385);
 		this.addChild(this.startButton);
+  },
+  playSound: function(){
     cc.audioEngine.playMusic(res.Sound_GTR);
-    return true;
   },
   //check event aftter key down
   onKeyDown: function( keyCode, event ) {

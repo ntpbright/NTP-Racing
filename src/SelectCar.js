@@ -9,6 +9,14 @@ var SelectCar = cc.LayerColor.extend({
     this.bgSelectCar.setPosition(250,300);
     this.addChild(this.bgSelectCar);
 
+    this.carArr = [];
+    this.addCar();
+    this.addButton();
+    this.addKeyboardHandlers();
+    this.scheduleUpdate();
+    return true;
+  },
+  addButton: function(){
     this.selectButton = new cc.MenuItemImage(
 			res.Button_select_png,
 			res.Button_select_invert_png,
@@ -38,13 +46,6 @@ var SelectCar = cc.LayerColor.extend({
     this.rightButton = new cc.Menu(this.rightButton);
     this.rightButton.setPosition(450,300);
 		this.addChild(this.rightButton);
-
-    this.carArr = [];
-    this.addCar();
-
-    this.addKeyboardHandlers();
-    this.scheduleUpdate();
-    return true;
   },
   addCar: function(){
       for(i = 1 ; i <= 9 ; i++){
