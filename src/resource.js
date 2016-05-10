@@ -32,6 +32,7 @@ var res = {
     Sprite_Car_08 : "res/images/Car_08.png",
     Sprite_Car_09 : "res/images/Car_09.png",
     Obstacle_01 : 'res/images/obstacle_01.png',
+    Sound_Background: "res/sound/background.mp3",
     Sound_GTR : 'res/sound/r35.mp3',
     Sound_GameOver : 'res/sound/GameOver.mp3',
 };

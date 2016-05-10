@@ -27,6 +27,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     this.addChild( this.highScoreLabel );
     this.state = GamePlaySinglePlayerLayer.STATES.STARTED;
     this.startGame();
+    cc.audioEngine.playMusic(res.Sound_Background);
     this.scheduleUpdate();
     return true;
   },
