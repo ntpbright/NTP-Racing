@@ -15,18 +15,18 @@ var GameLayer = cc.LayerColor.extend({
 			res.Button_pressAny_af_png,
 			function(){
 				this.unscheduleUpdate();
-				cc.director.runScene(new MenuScene());
+				cc.director.runScene( new cc.TransitionShrinkGrow.create(1,new MenuScene()));
 			},this);
 		this.startButton = new cc.Menu(this.startButton);
 		this.startButton.setPosition(screenWidth/2,screenHeight-385);
 		this.addChild(this.startButton);
-    cc.audioEngine.playMusic('res/sound/r35.mp3');
+    cc.audioEngine.playMusic(res.Sound_GTR);
     return true;
   },
   //check event aftter key down
   onKeyDown: function( keyCode, event ) {
     this.unscheduleUpdate();
-    cc.director.runScene(new MenuScene());
+    cc.director.runScene( new cc.TransitionShrinkGrow.create(1,new MenuScene()));
   },
   addKeyboardHandlers: function() {
     var self = this;

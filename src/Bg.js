@@ -1,7 +1,7 @@
 var Bg = cc.Sprite.extend({
     ctor: function() {
         this._super();
-        this.initWithFile( 'res/images/bg.jpg' );
+        this.initWithFile(res.BG);
         this.started = false;
         this.constantsVelocity = 0.1;
     },

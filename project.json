@@ -2,7 +2,7 @@
     "project_type": "javascript",
 
     "debugMode" : 1,
-    "showFPS" : true,
+    "showFPS" : false,
     "frameRate" : 60,
     "noCache" : false,
     "id" : "gameCanvas",
@@ -22,6 +22,11 @@
         "src/GameOverLayer.js",
         "src/BgGameOver.js",
         "src/Menu.js",
-        "src/BgMenu.js"
+        "src/BgMenu.js",
+        "src/SelectCar.js",
+        "src/BgSelectCar.js",
+        "src/ShowRoom.js",
+        "src/BgHowTo.js",
+        "src/HowTo.js"
     ]
 }

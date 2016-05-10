@@ -39,7 +39,7 @@ var GameOverLayer = cc.LayerColor.extend({
     this.highScoreLabel = cc.LabelTTF.create( highScore+"" , 'Haettenschweiler', 65 );
     this.highScoreLabel.setPosition( new cc.Point( 250, 335 ) );
     this.addChild( this.highScoreLabel );
-
+    cc.audioEngine.playMusic("res/sound/GameOver.mp3");
     return true;
   }
 });

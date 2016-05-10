@@ -1,8 +1,8 @@
 var Car = cc.Sprite.extend({
     ctor: function() {
         this._super();
-        this.initWithFile( 'res/images/Car_01.png' );
-        this.randomPosition();
+        this.checkCarStyle();
+        // this.randomPosition();
         this.started = false;
     },
     update: function( dt ) {
@@ -29,6 +29,27 @@ var Car = cc.Sprite.extend({
         }else if(lane == 6 ){
            return 375;
         }
+    },
+    checkCarStyle: function(){
+      if(carStyle == 1){
+          this.initWithFile( res.Sprite_Car_01 );
+      }else if(carStyle == 2){
+          this.initWithFile( res.Sprite_Car_02 );
+      }else if(carStyle == 3){
+          this.initWithFile( res.Sprite_Car_03 );
+      }else if(carStyle == 4){
+          this.initWithFile( res.Sprite_Car_04 );
+      }else if(carStyle == 5){
+          this.initWithFile( res.Sprite_Car_05 );
+      }else if(carStyle == 6){
+          this.initWithFile( res.Sprite_Car_06 );
+      }else if(carStyle == 7){
+          this.initWithFile( res.Sprite_Car_07 );
+      }else if(carStyle == 8){
+          this.initWithFile( res.Sprite_Car_08 );
+      }else if(carStyle == 9){
+          this.initWithFile( res.Sprite_Car_09 );
+      }
     },
     changePosition: function(keyCode){
         if( keyCode == cc.KEY.right){

@@ -15,7 +15,7 @@ var Menu = cc.LayerColor.extend({
 			res.Button_start_invert_png,
 			function(){
 				this.unscheduleUpdate();
-				cc.director.runScene(new SinglePlayerScene());
+        cc.director.runScene( cc.TransitionFade.create( 0.4 ,new SinglePlayerScene()));
 			},this);
 		this.startButton = new cc.Menu(this.startButton);
     this.startButton.setPosition(250,380);
@@ -26,7 +26,7 @@ var Menu = cc.LayerColor.extend({
       res.Button_selectCar_invert_png,
       function(){
         this.unscheduleUpdate();
-        cc.director.runScene(new SelectCarScene());
+        cc.director.runScene( cc.TransitionFade.create( 2 ,new SelectCarScene()));
       },this);
     this.selectCarButton = new cc.Menu(this.selectCarButton);
     this.selectCarButton.setPosition(250,230);
@@ -37,7 +37,7 @@ var Menu = cc.LayerColor.extend({
       res.Button_howToPlay_invert_png,
       function(){
         this.unscheduleUpdate();
-        cc.director.runScene(new HowToPlayScene());
+        cc.director.runScene( cc.TransitionFade.create( 2 ,new HowToPlayScene()));
       },this);
     this.howToButton = new cc.Menu(this.howToButton);
     this.howToButton.setPosition(250,80);
@@ -46,7 +46,7 @@ var Menu = cc.LayerColor.extend({
     return true;
   }
 });
-
+var carStyle = 2;
 var MenuScene = cc.Scene.extend({
   onEnter: function() {
     this._super();

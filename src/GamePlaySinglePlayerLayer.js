@@ -11,6 +11,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
     this.addBg();
     //initailize Car
     this.car = new Car();
+    this.car.randomPosition();
     this.addChild(this.car);
     this.car.scheduleUpdate();
     //initailize obstacle
@@ -71,7 +72,7 @@ var GamePlaySinglePlayerLayer = cc.LayerColor.extend({
   //add obstacle to frame
   addObstacle: function(){
     for(i = 1  ; i <= 6 ; i++){
-      this.obstacleArr[i] = new Obstacle(i)
+      this.obstacleArr[i] = new Obstacle(i);
       this.addChild(this.obstacleArr[i]);
       this.obstacleArr[i].scheduleUpdate();
     }
@@ -212,6 +213,6 @@ GamePlaySinglePlayerLayer.STATES = {
     DEAD: 2
 };
 GamePlaySinglePlayerLayer.MAGICNUMBER = {
-  SPEED: 0.5,
+  SPEED: 0.8,
   BREAK: 0
 };

@@ -3,7 +3,7 @@
 var Obstacle = cc.Sprite.extend({
     ctor: function() {
         this._super();
-        this.initWithFile( 'res/images/obstacle_01.png' );
+        this.initWithFile( res.Obstacle_01 );
         this.randomPosition();
         this.started = false;
         this.velocity = this.randomVelocity();
@@ -11,7 +11,7 @@ var Obstacle = cc.Sprite.extend({
     },
     ctor: function(lane) {
         this._super();
-        this.initWithFile( 'res/images/obstacle_01.png' );
+        this.initWithFile( res.Obstacle_01 );
         this.started = false;
         this.setPositionX(this.selectLane(lane));
         this.setPositionY(650);
